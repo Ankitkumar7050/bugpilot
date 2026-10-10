@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BugPilot Learning Center</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#f2f5f7;--panel:#fff;--ink:#12263a;--mute:#5b6b7a;--line:#d5dde4;--teal:#0e7c86;--tealbg:#dff1f2;--warn:#f2c230;--bad:#c8372d;--badbg:#fbe4e1;--ok:#1f7a4d;--okbg:#dff3e7;--glow:rgba(14,124,134,.18);--glow2:rgba(242,194,48,.16);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b27;--panel:#17283a;--ink:#e6eef5;--mute:#9db0c1;--line:#2b4157;--teal:#4fc3cd;--tealbg:#143b45;--bad:#ff8a80;--badbg:#44211f;--ok:#6fd49a;--okbg:#17382a;--btnink:#06222a;--glow:rgba(79,195,205,.16);--glow2:rgba(242,194,48,.08)}}
+:root[data-theme="dark"]{--bg:#0f1b27;--panel:#17283a;--ink:#e6eef5;--mute:#9db0c1;--line:#2b4157;--teal:#4fc3cd;--tealbg:#143b45;--bad:#ff8a80;--badbg:#44211f;--ok:#6fd49a;--okbg:#17382a;--btnink:#06222a;--glow:rgba(79,195,205,.16);--glow2:rgba(242,194,48,.08)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 520px at 88% -8%,var(--glow),transparent 70%),radial-gradient(700px 480px at -5% 105%,var(--glow2),transparent 70%),var(--bg);background-attachment:fixed;color:var(--ink);font:400 17px/1.55 "Source Sans 3",system-ui,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,6vw,46px);font-weight:700}
+h2{font-size:22px;margin-bottom:6px}
+.lead{color:var(--mute);max-width:60ch;margin:10px 0 24px}
+nav{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:22px;overflow-x:auto}
+nav button{font:600 16px "Source Sans 3",sans-serif;background:none;border:0;color:var(--mute);padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--teal)}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px}
+label{font-weight:600;display:block;margin-bottom:6px}
+select,textarea{width:100%;font:15px/1.5 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px}
+textarea{min-height:110px;resize:vertical}
+.btn{font:600 16px "Source Sans 3",sans-serif;background:var(--teal);color:var(--btnink,#fff);border:0;border-radius:6px;padding:10px 18px;cursor:pointer;margin-top:12px}
+.greet{font:600 18px "Bricolage Grotesque",system-ui,sans-serif;color:var(--teal);margin:0 0 8px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.theme{font:600 14px "Source Sans 3",sans-serif;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.theme:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line);margin-right:8px}
+.btn:disabled{opacity:.45;cursor:default}
+.meta{font-size:14px;color:var(--mute);margin-top:10px}
+.sec{border-left:4px solid var(--teal);padding:2px 0 2px 14px;margin:16px 0}
+.sec h3{font-size:17px;margin-bottom:2px}
+.sec p{margin:0}
+.code{font:14.5px/1.6 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow-x:auto;padding:6px 0;margin:10px 0}
+.ln{display:block;padding:0 14px;white-space:pre;cursor:default}
+.pick .ln{cursor:pointer}
+.pick .ln:hover{background:var(--tealbg)}
+.ln.sel{background:var(--warn);color:#12263a}
+.ln.rm{background:var(--badbg);color:var(--bad)}
+.ln.add{background:var(--okbg);color:var(--ok)}
+.hint{background:var(--tealbg);border-radius:6px;padding:10px 14px;margin-top:10px}
+.msg{padding:10px 14px;border-radius:6px;margin-top:12px;font-weight:600}
+.msg.bad{background:var(--badbg);color:var(--bad)}
+.msg.ok{background:var(--okbg);color:var(--ok)}
+.row{display:grid;grid-template-columns:150px 1fr 28px;gap:12px;align-items:center;margin:12px 0}
+.track{height:12px;background:var(--bg);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.fill{height:100%;background:var(--teal);transition:width .4s}
+.who{display:flex;gap:16px;align-items:flex-end}
+.who>div:last-child{flex:1}
+.avatar{width:64px;height:64px;flex:none;border-radius:50%;background:var(--teal);color:var(--btnink,#fff);display:grid;place-items:center;font:700 24px "Bricolage Grotesque",system-ui,sans-serif}
+.who input{width:100%;font:17px "Source Sans 3",sans-serif;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px}
+.who input:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:10px}
+.stat{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.stat b{display:block;font:700 28px "Bricolage Grotesque",system-ui,sans-serif}
+.stat span{color:var(--mute);font-size:14px}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.chatlog{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:4px 2px}
+.bub{max-width:82%;padding:10px 14px;border-radius:14px;white-space:pre-wrap}
+.bub.bot{background:var(--bg);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.bub.me{background:var(--teal);color:var(--btnink,#fff);align-self:flex-end;border-bottom-right-radius:4px}
+.bub.mono{font:14.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
+.bub .code{margin:8px 0 0}
+.send textarea{flex:1;min-width:0;width:auto;min-height:56px;height:56px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{font:600 14px "Source Sans 3",sans-serif;background:var(--tealbg);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:6px 12px;cursor:pointer}
+.chip:focus-visible,.send input:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.send{display:flex;gap:8px}
+.send input{flex:1;min-width:0;font:17px "Source Sans 3",sans-serif;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px}
+.send .btn{margin-top:0}
+.send .btn.ghost{margin-right:0;white-space:nowrap}
+.quote{margin:0 0 16px;padding:2px 0 2px 14px;border-left:4px solid var(--warn);font:500 19px/1.4 "Bricolage Grotesque",system-ui,sans-serif;transition:opacity .4s;min-height:2.8em}
+.quote.out{opacity:0}
+@media (prefers-reduced-motion:reduce){.quote{transition:none}}
+.xp{display:flex;align-items:center;gap:12px;margin:0 0 18px;font-weight:600;font-size:15px}
+.xp .track{flex:1}
+.skip{display:inline-block;margin-top:14px;font-size:14px;color:var(--mute)}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+@media (max-width:520px){.row{grid-template-columns:110px 1fr 24px}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="wrap">
+  <p class="greet" id="greet"></p>
+  <div class="top"><h1>BugPilot Learning Center</h1><button class="theme" id="theme" type="button"></button></div>
+  <p class="lead">Every bug you hit becomes a short lesson. Paste an error, get it explained, then practice the same mistake until it sticks.</p>
+  <p class="quote" id="quote"></p>
+  <div class="xp" aria-live="polite"><span id="lvl">Level 1</span><div class="track"><div class="fill" id="xpfill" style="width:0"></div></div><span id="xpnum">0 / 100 XP</span></div>
+  <nav role="tablist">
+    <button role="tab" aria-selected="true" data-tab="explain">Explain a bug</button>
+    <button role="tab" aria-selected="false" data-tab="practice">Practice</button>
+    <button role="tab" aria-selected="false" data-tab="progress">My progress</button>
+    <button role="tab" aria-selected="false" data-tab="profile">Profile</button>
+    <button role="tab" aria-selected="false" data-tab="chat">Ask BugPilot</button>
+  </nav>
+
+  <section id="explain">
+    <div class="card">
+      <label for="sample">Try an example</label>
+      <select id="sample"></select>
+      <label for="err" style="margin-top:14px">Error and code</label>
+      <textarea id="err" spellcheck="false"></textarea>
+      <button class="btn" id="go">Explain this bug</button>
+      <div class="meta">Prototype: responses are scripted. In the full build this calls a local open-weight model (for example Qwen2.5-Coder 7B through Ollama).</div>
+    </div>
+    <div id="out"></div>
+  </section>
+
+  <section id="practice" hidden>
+    <div class="card">
+      <h2 id="chTitle"></h2>
+      <p id="chPrompt" style="margin:0;color:var(--mute)">Click the line that contains the bug.</p>
+      <div class="code pick" id="chCode"></div>
+      <div id="chFeedback"></div>
+      <div style="margin-top:12px">
+        <button class="btn ghost" id="hintBtn">Give me a hint</button>
+        <button class="btn ghost" id="nextBtn">Next challenge</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="progress" hidden>
+    <div class="card">
+      <h2>Bugs you've learned from</h2>
+      <p class="lead" style="margin:0 0 8px">Counts go up when you solve a challenge without revealing the answer.</p>
+      <div id="bars"></div>
+    </div>
+  </section>
+
+  <section id="profile" hidden>
+    <div class="card">
+      <div class="who"><div class="avatar" id="avatar" aria-hidden="true"></div><div><label for="nm">Display name</label><input id="nm" type="text" maxlength="40" autocomplete="name"></div></div>
+      <div class="meta">Your name appears in the greeting and is saved in this browser only.</div>
+    </div>
+    <div class="card">
+      <h2>Your stats</h2>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+  <section id="chat" hidden>
+    <div class="card">
+      <h2>Ask BugPilot</h2>
+      <div class="chatlog" id="chatLog" role="log" aria-live="polite"></div>
+      <div class="chips" id="chips"></div>
+      <div class="send"><textarea id="chatIn" rows="2" spellcheck="false" placeholder="Ask a question, or paste code or an error to fix" aria-label="Message BugPilot" maxlength="2000"></textarea><button class="btn ghost" id="micBtn" type="button" aria-pressed="false">Speak</button><button class="btn" id="chatSend" type="button">Send</button></div>
+      <div class="meta">Press Enter to send and Shift+Enter for a new line. Tap Speak to dictate, and turn on Read replies aloud to hear answers. Prototype: the fixer checks four common patterns (off-by-one loops, missing await on fetch, unchecked find() results, = instead of ===). The full version sends your code to a local open-weight model.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const SAMPLES=[
+{label:"JavaScript: reading 'name' of undefined",text:"TypeError: Cannot read properties of undefined (reading 'name')\n  at greet (app.js:4)\n\nfunction greet(users, id) {\n  const user = users.find(u => u.id === id);\n  return 'Hi ' + user.name;\n}",
+ what:"The code asked for the name of a user that does not exist.",
+ why:"users.find returns undefined when no user has that id. Line 3 then reads .name on undefined, which throws.",
+ old:"  return 'Hi ' + user.name;",fix:"  if (!user) return 'Hi, guest';\n  return 'Hi ' + user.name;",
+ lesson:"Null handling: anything that can return nothing (find, get, a lookup) needs a check before you use the result."},
+{label:"Python: list index out of range",text:"IndexError: list index out of range\n  File \"stats.py\", line 4\n\ndef last_two(items):\n    return items[-1], items[-2]\n\nlast_two([5])",
+ what:"The function asked for two items from a list that only has one.",
+ why:"items[-2] means the second item from the end. A list with one element has no such position, so Python raises IndexError.",
+ old:"    return items[-1], items[-2]",fix:"    if len(items) < 2:\n        return items[-1:], []\n    return items[-1], items[-2]",
+ lesson:"Boundaries: check the length before reaching for a position that may not exist."}
+];
+const CHALLENGES=[
+{title:"The average that never finishes right",cat:"Off-by-one",bug:2,
+ code:["function average(nums) {","  let total = 0;","  for (let i = 0; i <= nums.length; i++) {","    total += nums[i];","  }","  return total / nums.length;","}"],
+ hints:["The result comes out as NaN. Something is being added that isn't a number.","Look at how many times the loop runs compared to how many items the array holds.","Array positions run from 0 to length - 1, but this loop also runs when i equals length."],
+ fix:"for (let i = 0; i < nums.length; i++) {"},
+{title:"The name that prints as undefined",cat:"Async",bug:1,
+ code:["async function loadUser(id) {","  const res = fetch('/api/users/' + id);","  const user = await res.json();","  return user.name;","}"],
+ hints:["res.json is reported as not a function.","fetch does not hand you a response right away. What does it hand you instead?","fetch returns a promise. Without await, res is the promise, not the response."],
+ fix:"const res = await fetch('/api/users/' + id);"}
+];
+const stats={"Null handling":3,"Off-by-one":1,"Async":0};
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e};
+
+// greeting
+let fullName='Ankit Kumar';
+try{const n=localStorage.getItem('bp-name');if(n)fullName=n}catch(e){}
+function renderGreet(){const h=new Date().getHours();
+const g=h<5?'Working late':h<12?'Good morning':h<17?'Good afternoon':h<21?'Good evening':'Working late';
+$('#greet').textContent=g+', '+(fullName.trim().split(' ')[0]||'there')+'. Ready to squash a bug?'}
+renderGreet();
+
+// theme
+const root=document.documentElement,tb=$('#theme');
+const isDark=()=>root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+function setLabel(){tb.textContent=isDark()?'Switch to light theme':'Switch to dark theme'}
+try{const t=localStorage.getItem('bp-theme');if(t)root.dataset.theme=t}catch(e){}
+setLabel();
+tb.onclick=()=>{const n=isDark()?'light':'dark';root.dataset.theme=n;try{localStorage.setItem('bp-theme',n)}catch(e){}setLabel();window.bgRefresh&&window.bgRefresh()};
+
+// tabs
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  ['explain','practice','progress','profile','chat'].forEach(id=>$('#'+id).hidden=id!==b.dataset.tab);
+  if(b.dataset.tab==='progress')renderBars();
+  if(b.dataset.tab==='profile')renderProfile();
+});
+
+// explain
+const sel=$('#sample');
+SAMPLES.forEach((s,i)=>sel.add(new Option(s.label,i)));
+sel.onchange=()=>$('#err').value=SAMPLES[sel.value].text;
+$('#err').value=SAMPLES[0].text;
+$('#go').onclick=()=>{
+  const txt=$('#err').value.trim();const out=$('#out');out.textContent='';
+  if(!txt){out.append(Object.assign(el('div','msg bad','Paste an error message or stack trace first.')));return}
+  const s=SAMPLES.find(x=>x.text===txt);
+  const card=el('div','card');
+  const sec=(h,p)=>{const d=el('div','sec');d.append(el('h3','',h),el('p','',p));return d};
+  if(!s){
+    card.append(sec('This is a scripted prototype','Only the two example errors have written explanations. The full version sends your text to an open-weight model and returns the same three parts: what happened, why, and how to fix it.'));
+  }else{
+    card.append(sec('What happened',s.what),sec('Why it happened',s.why));
+    const d=el('div','sec');d.append(el('h3','','The fix'));
+    const code=el('div','code');
+    const r=el('span','ln rm','- '+s.old.trim());code.append(r);
+    s.fix.split('\n').forEach(l=>code.append(el('span','ln add','+ '+l.trim())));
+    d.append(code);card.append(d,sec('Remember this',s.lesson));
+    if(!explained.has(s.label)){explained.add(s.label);addXp(10);card.append(el('div','meta','+10 XP for reading this explanation'))}
+  }
+  out.append(card);
+};
+
+// practice
+let ci=0,hintN=0,revealed=false,done=false;
+let xp=0;const solved=new Set(),explained=new Set();
+function renderXp(){$('#lvl').textContent='Level '+(Math.floor(xp/100)+1);$('#xpfill').style.width=(xp%100)+'%';$('#xpnum').textContent=(xp%100)+' / 100 XP'}
+function addXp(n){xp+=n;renderXp()}
+function loadChallenge(){
+  const c=CHALLENGES[ci];hintN=0;revealed=false;done=false;
+  $('#chTitle').textContent=c.title;
+  $('#chFeedback').textContent='';
+  $('#hintBtn').disabled=false;
+  const box=$('#chCode');box.textContent='';box.classList.add('pick');
+  c.code.forEach((l,i)=>{const s=el('span','ln',l);s.onclick=()=>pick(i,s);box.append(s)});
+}
+function pick(i,node){
+  if(done)return;
+  const c=CHALLENGES[ci],fb=$('#chFeedback');
+  document.querySelectorAll('#chCode .ln').forEach(n=>n.classList.remove('sel'));
+  node.classList.add('sel');fb.textContent='';
+  if(i===c.bug){
+    done=true;$('#chCode').classList.remove('pick');
+    fb.append(el('div','msg ok',revealed?'That is the line. Fix: '+c.fix:'Found it. Fix: '+c.fix));
+    const first=!solved.has(ci);
+    if(!revealed&&first){stats[c.cat]++;fb.append(el('div','meta','Added to "'+c.cat+'" in My progress.'))}
+    const gain=first?[50,40,30,15][hintN]:0;solved.add(ci);
+    fb.append(el('div','meta',gain?'+'+gain+' XP'+(hintN?' (fewer hints earns more)':''):'Already solved, so no more XP for this one.'));
+    if(gain)addXp(gain);
+  }else fb.append(el('div','msg bad','Not that line. Read the code again, or ask for a hint.'));
+}
+$('#hintBtn').onclick=()=>{
+  const c=CHALLENGES[ci],fb=$('#chFeedback');
+  if(hintN<c.hints.length){
+    fb.querySelectorAll('.hint').forEach(h=>h.remove());
+    fb.append(el('div','hint','Hint '+(hintN+1)+' of '+c.hints.length+': '+c.hints[hintN]));hintN++;
+  }
+  if(hintN===c.hints.length){revealed=true;$('#hintBtn').disabled=true;fb.append(el('div','meta','No more hints. Solving it now will not count toward progress.'))}
+};
+$('#nextBtn').onclick=()=>{ci=(ci+1)%CHALLENGES.length;loadChallenge()};
+loadChallenge();
+
+// idea network background
+(function(){
+const cv=document.getElementById('bg'),cx=cv.getContext('2d');
+let W,H,pts=[],col='#0e7c86',dpr=Math.min(window.devicePixelRatio||1,2);
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function readCol(){col=getComputedStyle(document.documentElement).getPropertyValue('--teal').trim()||col}
+function size(){W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+ const n=Math.round(Math.min(70,W*H/16000));
+ pts=Array.from({length:n},(_,i)=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,spark:i%9===0}))}
+function draw(){
+ cx.clearRect(0,0,W,H);cx.strokeStyle=col;
+ for(let i=0;i<pts.length;i++){const p=pts[i];
+  if(!reduce){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1}
+  cx.fillStyle=p.spark?'#f2c230':col;cx.globalAlpha=p.spark?.95:.5;
+  cx.beginPath();cx.arc(p.x,p.y,p.spark?3.2:2,0,6.283);cx.fill();
+  for(let j=i+1;j<pts.length;j++){const q=pts[j],d=Math.hypot(p.x-q.x,p.y-q.y);
+   if(d<140){cx.globalAlpha=.22*(1-d/140);cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(q.x,q.y);cx.stroke()}}}
+ if(!reduce)requestAnimationFrame(draw)}
+window.bgRefresh=()=>{readCol();if(reduce)draw()};
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>setTimeout(window.bgRefresh,0));
+addEventListener('resize',()=>{size();if(reduce)draw()});
+readCol();size();draw();
+})();
+
+// chat
+const RULES=[
+[/^(hi|hello|hey)\b/,`Hi! Ask me about a bug type, like null errors, off-by-one mistakes, or async code, or type an error message and I will explain it.`],
+[/\bxp\b|level/,`You earn XP by reading an explanation (+10) and by solving a practice challenge: +50 with no hints, 40 with one, 30 with two, 15 with all three. Every 100 XP is a level.`],
+[/undefined|null|cannot read|nonetype/,`That error usually means a value you expected is missing. A lookup such as find() or a missing key returned nothing, and the next line used it anyway.\n\nCheck the value before you use it, for example if (!user) return. The first example in Explain a bug walks through this.`],
+[/off.?by.?one|index|out of range|<=|loop/,`An off-by-one error is a loop or index that is one step too far or too short. Positions in a list run from 0 to length minus 1, so a loop that runs while i <= length reads one item past the end.\n\nTry the average challenge in Practice.`],
+[/async|await|promise|fetch/,`Use await whenever a function returns a promise and you need its result right now. fetch returns a promise, so without await you hold the promise instead of the response, and calls like res.json() fail.`],
+[/hint/,`In Practice, the hint button gives three steps: a symptom, a nudge toward the cause, and the exact idea. Fewer hints earn more XP.`],
+[/python/,`Python bugs often show up as IndexError, KeyError, or NoneType errors. The second example in Explain a bug is a Python IndexError.`],
+[/debug|what is a bug|how do i find/,`A reliable routine: reproduce the bug, read the error message from the top, narrow it to one line or function, guess the cause, then change one thing and test again.`],
+[/thank/,`You are welcome. Want to try a practice challenge?`]
+];
+const FALLBACK=`I only know a few topics in this prototype: null errors, off-by-one mistakes, async and await, hints, and XP. Try one of those, or paste an error in Explain a bug.`;
+const CHIPS=['Why is my value undefined?','What is an off-by-one error?','When do I use await?','How does XP work?'];
+const log=$('#chatLog');
+function solve(code){
+  const lines=code.split('\n'),out=[],rm=[],add=[],why=[];
+  lines.forEach((ln,i)=>{
+    let n=ln;
+    if(/<=\s*[\w.]+\.length/.test(n)){n=n.replace(/<=(\s*[\w.]+\.length)/,'<$1');why.push('The loop runs one time too many. Positions go up to length minus 1, so use < instead of <=.')}
+    else if(/range\(len\([\w.]+\)\s*\+\s*1\)/.test(n)){n=n.replace(/range\(len\(([\w.]+)\)\s*\+\s*1\)/,'range(len($1))');why.push('range(len(x) + 1) goes one step past the last index. Use range(len(x)).')}
+    if(/=\s*fetch\(/.test(n)&&!/await/.test(n)){n=n.replace(/=\s*fetch\(/,'= await fetch(');why.push('fetch returns a promise, so the call needs await (inside an async function) to get the response.')}
+    if(/\bif\s*\(\s*\w+\s*=\s*[^=)]/.test(n)){n=n.replace(/\bif\s*\(\s*(\w+)\s*=\s*([^=)]+)\)/,'if ($1 === $2)');why.push('A single = assigns a value. Use === to compare.')}
+    if(n!==ln){rm.push(ln.trim());add.push(n.trim())}
+    out.push(n);
+    const m=n.match(/^(\s*)(?:const|let|var)\s+(\w+)\s*=\s*.+\.find\(/);
+    if(m&&lines.slice(i+1).some(l=>l.includes(m[2]+'.'))&&!code.includes('if (!'+m[2])&&!code.includes('if(!'+m[2])){
+      const g=m[1]+'if (!'+m[2]+') return null;';out.push(g);add.push(g.trim());
+      why.push('find() returns undefined when nothing matches, so check '+m[2]+' before using it.')}
+  });
+  return why.length?{why:[...new Set(why)],rm,add,fixed:out.join('\n')}:null;
+}
+const NOSOLVE=`I could not spot a bug I know how to fix in that code. This prototype checks four patterns: off-by-one loops, a missing await on fetch, an unchecked find() result, and = used instead of ===. Paste the error message too, or ask a question.`;
+const SAMPLE_CODE='function sum(nums) {\n  let t = 0;\n  for (let i = 0; i <= nums.length; i++) {\n    t += nums[i];\n  }\n  return t;\n}';
+let speak=false;
+function say(t,who,extra){const b=el('div','bub '+who+(t.includes('\n')?' mono':''),t);if(extra)extra.forEach(x=>b.append(x));log.append(b);log.scrollTop=log.scrollHeight;if(who==='bot')talk(t)}
+function send(q){q=(q||'').trim();if(!q)return;say(q,'me');$('#chatIn').value='';
+  const s=solve(q),t=q.toLowerCase(),r=RULES.find(x=>x[0].test(t));
+  const looksCode=q.includes('\n')||/[;{}]/.test(q);
+  setTimeout(()=>{
+    if(s){
+      const d=el('div','code');s.rm.forEach(l=>d.append(el('span','ln rm','- '+l)));s.add.forEach(l=>d.append(el('span','ln add','+ '+l)));
+      const full=el('div','code');s.fixed.split('\n').forEach(l=>full.append(el('span','ln',l||' ')));
+      say('Found '+s.why.length+' problem'+(s.why.length>1?'s':'')+':\n'+s.why.map(w=>'- '+w).join('\n')+'\n\nWhat changed:','bot',[d,el('div','meta','Fixed code:'),full]);
+    }else if(looksCode&&!r)say(NOSOLVE,'bot');
+    else say(r?r[1]:FALLBACK,'bot');
+  },350)}
+$('#chatSend').onclick=()=>send($('#chatIn').value);
+$('#chatIn').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send(e.target.value)}};
+CHIPS.forEach(c=>{const b=el('button','chip',c);b.type='button';b.onclick=()=>send(c);$('#chips').append(b)});
+{const b=el('button','chip','Fix a sample bug');b.type='button';b.onclick=()=>send(SAMPLE_CODE);$('#chips').append(b)}
+say(`Hi, I am BugPilot. Ask me a question, or paste buggy code and I will find the problem and show the fix.`,'bot');
+
+// voice
+function talk(t){if(!speak||!('speechSynthesis' in window))return;
+  try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t.replace(/^- /gm,'')))}catch(e){}}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const mic=$('#micBtn');let rec=null,listening=false;
+if(!SR){mic.disabled=true;mic.title='Voice input is not supported in this browser'}
+mic.onclick=()=>{
+  if(!SR)return;
+  if(listening){if(rec)rec.stop();return}
+  try{
+    rec=new SR();rec.lang=navigator.language||'en-US';rec.interimResults=true;rec.continuous=false;
+    const box=$('#chatIn'),base=box.value?box.value+' ':'';
+    rec.onresult=e=>{let t='';for(const r of e.results)t+=r[0].transcript;box.value=base+t};
+    rec.onend=()=>{listening=false;mic.textContent='Speak';mic.setAttribute('aria-pressed','false')};
+    rec.onerror=e=>{say(e.error==='not-allowed'||e.error==='service-not-allowed'?'Microphone access is blocked. Allow the microphone for this page in your browser, then try again.':'Voice input stopped ('+e.error+'). Try again, or type your message.','bot')};
+    rec.start();listening=true;mic.textContent='Stop';mic.setAttribute('aria-pressed','true');
+  }catch(err){say('Voice input could not start in this browser. You can type your message instead.','bot')}
+};
+{const b=el('button','chip','Read replies aloud: off');b.type='button';b.setAttribute('aria-pressed','false');
+  if(!('speechSynthesis' in window)){b.disabled=true;b.textContent='Read aloud not supported'}
+  b.onclick=()=>{speak=!speak;b.textContent='Read replies aloud: '+(speak?'on':'off');b.setAttribute('aria-pressed',String(speak));if(!speak&&window.speechSynthesis)speechSynthesis.cancel()};
+  $('#chips').append(b)}
+
+// rotating quote
+const QUOTES=[
+'Every bug you fix is a lesson you only have to learn once.',
+'Read the error from the top. It is usually telling the truth.',
+'Big ideas start as small experiments that fail in useful ways.',
+'Change one thing, then test. Two changes hide the cause.',
+'A bug is just a question your code is asking you.',
+'Innovation is curiosity with a working prototype.',
+'If you cannot explain the bug, you have not found it yet.',
+'Ship it small, learn fast, fix it better.'];
+let qi=Math.floor(Math.random()*QUOTES.length),qpaused=false;
+const qe=$('#quote');qe.textContent=QUOTES[qi];
+setInterval(()=>{if(qpaused||document.hidden)return;qe.classList.add('out');
+  setTimeout(()=>{qi=(qi+1)%QUOTES.length;qe.textContent=QUOTES[qi];qe.classList.remove('out')},400)},10000);
+qe.onmouseenter=()=>{qpaused=true};qe.onmouseleave=()=>{qpaused=false};
+
+// profile
+function initials(n){return n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?'}
+function renderProfile(){
+  $('#nm').value=fullName;$('#avatar').textContent=initials(fullName);
+  const st=$('#stats');st.textContent='';
+  [['Level',Math.floor(xp/100)+1],['Total XP',xp],['Challenges solved',solved.size],['Explanations read',explained.size]].forEach(([k,v])=>{const d=el('div','stat');d.append(el('b','',String(v)),el('span','',k));st.append(d)});
+}
+$('#nm').oninput=e=>{fullName=e.target.value;$('#avatar').textContent=initials(fullName);renderGreet();try{localStorage.setItem('bp-name',fullName)}catch(err){}};
+
+// progress
+function renderBars(){
+  const b=$('#bars');b.textContent='';
+  const max=Math.max(5,...Object.values(stats));
+  Object.entries(stats).forEach(([k,v])=>{
+    const r=el('div','row');const t=el('div','track');const f=el('div','fill');f.style.width=(v/max*100)+'%';t.append(f);
+    r.append(el('div','',k),t,el('div','',String(v)));b.append(r);
+  });
+}
+</script>
+</body>
+</html>
